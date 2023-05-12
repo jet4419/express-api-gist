@@ -52,4 +52,67 @@ userRouter.get('/:id', async (req, res) => {
 	}
 });
 
+userRouter.post('/', async (req, res) => {
+	try {
+		const userData = req.body;
+		dbUser.push(userData);
+		res.status(200).json({
+			message: 'Data added successfully',
+			data: dbUser,
+		});
+	} catch (error) {
+		console.log(error.message);
+		res.status(400).json({
+			message: error.message,
+		});
+	}
+});
+
+userRouter.patch('/:id', (req, res) => {
+	try {
+		const userIndex = dbUser.findIndex(
+			(user) => user.id === Number(req.params.id)
+		);
+		const userData = req.body;
+
+		console.log(userIndex);
+
+		if (userIndex !== -1) {
+			dbUser[userIndex] = userData;
+
+			res.status(200).json({
+				message: 'Data updated successfully',
+				data: dbUser[userIndex],
+			});
+		} else {
+			throw 400;
+		}
+	} catch (error) {
+		res.status(400).json({
+			message: 'Please enter a valid user',
+		});
+	}
+});
+
+userRouter.delete('/:id', (req, res) => {
+	try {
+		const userIndex = dbUser.findIndex(
+			(user) => user.id === Number(req.params.id)
+		);
+		if (userIndex !== -1) {
+			dbUser.splice(userIndex, 1);
+			res.status(200).json({
+				message: 'Data deleted successfully',
+				data: dbUser,
+			});
+		} else {
+			throw 400;
+		}
+	} catch (error) {
+		res.status(400).json({
+			message: 'Please enter a valid user',
+		});
+	}
+});
+
 module.exports = userRouter;
