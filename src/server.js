@@ -12,7 +12,7 @@ const { MongoClient } = require('mongodb');
 // Replace the uri string with your connection string.
 const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
-
+const database = client.db('apptest');
 //
 
 const whitelist = [
@@ -45,10 +45,42 @@ app.get('/', (req, res) => {
 	res.send('Hello NODE API');
 });
 
+app.get('/common-occupation', async (req, res) => {
+	try {
+		const commonOcc = database.collection('common-occupation');
+		const data = await commonOcc.find().toArray();
+
+		res.status(200).json({
+			message: 'OK',
+			data: data,
+		});
+	} catch (error) {
+		res.status(500).json({
+			message: error.message,
+		});
+	}
+});
+
+app.get('/psoc', async (req, res) => {
+	try {
+		const commonOcc = database.collection('psoc');
+		const data = await commonOcc.find().toArray();
+
+		res.status(200).json({
+			message: 'OK',
+			data: data,
+		});
+	} catch (error) {
+		res.status(500).json({
+			message: error.message,
+		});
+	}
+});
+
 app.get('/codebook', async (req, res) => {
 	try {
 		// const database = client.db('apptest');
-		const database = client.db('apptest');
+
 		const codebook = database.collection('2023_codebook');
 		// console.log('codebook');
 		// console.log(codebook);
@@ -66,10 +98,11 @@ app.get('/codebook', async (req, res) => {
 		res.status(500).json({
 			message: error.message,
 		});
-	} finally {
-		// Ensures that the client will close when you finish/error
-		await client.close();
 	}
+	// finally {
+	// 	// Ensures that the client will close when you finish/error
+	// 	await client.close();
+	// }
 
 	// try {
 	// 	const codebook = await Codebook.find();
@@ -82,6 +115,23 @@ app.get('/codebook', async (req, res) => {
 	// 		message: error.message,
 	// 	});
 	// }
+});
+
+app.get('/translations', async (req, res) => {
+	try {
+		const translations = database.collection('translations');
+
+		const data = await translations.find().toArray();
+
+		res.status(200).json({
+			message: 'OK',
+			data: data,
+		});
+	} catch (error) {
+		res.status(500).json({
+			message: error.message,
+		});
+	}
 });
 
 app.get('/users', async (req, res) => {
