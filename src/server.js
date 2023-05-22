@@ -10,7 +10,7 @@ const cors = require('cors');
 // MongoClient
 const { MongoClient } = require('mongodb');
 // Replace the uri string with your connection string.
-const uri = 'mongodb://localhost:27017';
+const uri = 'mongodb://mongo_db:27017';
 const client = new MongoClient(uri);
 const database = client.db('apptest');
 //
@@ -35,13 +35,19 @@ const corsOptions = {
 
 //routes
 
-// app.use(cors(corsOptions));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(compression());
 
+const PlayRoute = require('./routes/Play.route');
+app.use('/plays', PlayRoute);
+
 app.get('/', (req, res) => {
+	res.send('Hello NODE API');
+});
+
+app.post('/play', (req, res) => {
 	res.send('Hello NODE API');
 });
 
@@ -160,7 +166,7 @@ app.post('/users', async (req, res) => {
 
 mongoose.set('strictQuery', false);
 mongoose
-	.connect('mongodb://localhost:27017/apptest')
+	.connect('mongodb://mongo_db:27017/apptest')
 	.then(() => {
 		console.log('connected to MongoDB');
 		app.listen(3000, () => {
