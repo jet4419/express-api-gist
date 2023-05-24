@@ -9,5 +9,6 @@ router.get('/', TranslationsController.getTranslations);
 
 //Create a new product
 router.post('/', TranslationsController.addTranslations);
+router.post('/upload', TranslationsController.uploadTranslations);
 
 module.exports = router;

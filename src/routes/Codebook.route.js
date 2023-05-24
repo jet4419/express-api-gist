@@ -9,5 +9,6 @@ router.get('/', CodebookController.getCodebook);
 
 //Create a new product
 router.post('/', CodebookController.addCodebook);
+router.post('/upload', CodebookController.uploadCodebook);
 
 module.exports = router;

@@ -7,18 +7,15 @@ const { MongoClient } = require('mongodb');
 // const uri = 'mongodb://mongo_db:27017';
 const uri = 'mongodb://mongo_db:27017';
 const client = new MongoClient(uri);
-const Codebook = require('../models/Codebook.model');
+// const Codebook = require('../models/Codebook.model');
 const db = client.db('cbms-resources');
 
-const collection = db.collection('2023_codebook');
+const collection = db.collection('common-occupation');
 // const data = await commonOcc.find().toArray();
 
 module.exports = {
-	uploadCodebook: async (req, res, next) => {
+	uploadCommonOccupation: async (req, res, next) => {
 		try {
-			console.log('req.body:');
-			console.log(req.body);
-			console.log('req.body.end:');
 			const userReq = req.body;
 
 			collection.insertOne(userReq, (err, result) => {
@@ -44,11 +41,8 @@ module.exports = {
 			next(error);
 		}
 	},
-	getCodebook: async (req, res, next) => {
+	getCommonOccupation: async (req, res, next) => {
 		try {
-			// const results = await Codebook.find({}, { __v: 0, _id: 0 });
-			// const results = await Product.find({}, { name: 1, price: 1, _id: 0 });
-			// const results = await Product.find({ price: 699 }, {});
 			const results = await collection.find({}, { __v: 0, _id: 0 }).toArray();
 
 			res.send(results);
@@ -56,11 +50,36 @@ module.exports = {
 			console.log(error.message);
 		}
 	},
-	addCodebook: async (req, res, next) => {
+	addCommonOccupation: async (req, res, next) => {
 		try {
 			const data = new Codebook(req.body);
 			const result = await data.save();
 			res.send(result);
+		} catch (error) {
+			console.log(error.message);
+
+			if (error.name === 'ValidationError') {
+				res.status(400).json({
+					message: error.message,
+				});
+				return;
+			}
+			next(error);
+		}
+	},
+	dropCommonOccupation: async (req, res, next) => {
+		try {
+			collection.drop((err, result) => {
+				if (err) {
+					console.log(err);
+					next(err);
+				}
+				console.log('Collection deleted successfully');
+				res.send(result);
+			});
+			// const data = new Codebook(req.body);
+			// const result = await data.save();
+			// res.send(userReq);
 		} catch (error) {
 			console.log(error.message);
 

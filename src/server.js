@@ -5,6 +5,7 @@ const app = express();
 const compression = require('compression');
 
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const whitelist = [
 	'https://cbmsr.app/',
@@ -29,8 +30,10 @@ const corsOptions = {
 //routes
 
 app.use(cors());
-app.use(express.json());
+// app.use(express.json({ limit: '3mb' }));
 app.use(express.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json({ limit: '3mb' }));
 app.use(compression());
 
 require('./initDB')();
@@ -44,6 +47,12 @@ app.get('/', (req, res) => {
 
 const CodebookRoute = require('./routes/Codebook.route');
 app.use('/codebook', CodebookRoute);
+
+const CommonOccupationRoute = require('./routes/CommonOccupation.route');
+app.use('/common-occupation', CodebookRoute);
+
+const PsocRoute = require('./routes/PSOC.route');
+app.use('/psoc', PsocRoute);
 
 const TranslationsRoute = require('./routes/Translations.route');
 app.use('/translations', TranslationsRoute);

@@ -7,14 +7,14 @@ const { MongoClient } = require('mongodb');
 // const uri = 'mongodb://mongo_db:27017';
 const uri = 'mongodb://mongo_db:27017';
 const client = new MongoClient(uri);
-const Codebook = require('../models/Codebook.model');
+// const Codebook = require('../models/Codebook.model');
 const db = client.db('cbms-resources');
 
-const collection = db.collection('2023_codebook');
+const collection = db.collection('psoc');
 // const data = await commonOcc.find().toArray();
 
 module.exports = {
-	uploadCodebook: async (req, res, next) => {
+	uploadPSOC: async (req, res, next) => {
 		try {
 			console.log('req.body:');
 			console.log(req.body);
@@ -44,7 +44,7 @@ module.exports = {
 			next(error);
 		}
 	},
-	getCodebook: async (req, res, next) => {
+	getPSOC: async (req, res, next) => {
 		try {
 			// const results = await Codebook.find({}, { __v: 0, _id: 0 });
 			// const results = await Product.find({}, { name: 1, price: 1, _id: 0 });
@@ -56,21 +56,22 @@ module.exports = {
 			console.log(error.message);
 		}
 	},
-	addCodebook: async (req, res, next) => {
-		try {
-			const data = new Codebook(req.body);
-			const result = await data.save();
-			res.send(result);
-		} catch (error) {
-			console.log(error.message);
+	// ,
+	// addCodebook: async (req, res, next) => {
+	// 	try {
+	// 		const data = new Codebook(req.body);
+	// 		const result = await data.save();
+	// 		res.send(result);
+	// 	} catch (error) {
+	// 		console.log(error.message);
 
-			if (error.name === 'ValidationError') {
-				res.status(400).json({
-					message: error.message,
-				});
-				return;
-			}
-			next(error);
-		}
-	},
+	// 		if (error.name === 'ValidationError') {
+	// 			res.status(400).json({
+	// 				message: error.message,
+	// 			});
+	// 			return;
+	// 		}
+	// 		next(error);
+	// 	}
+	// },
 };
