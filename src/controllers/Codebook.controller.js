@@ -4,14 +4,20 @@
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 // Replace the uri string with your connection string.
-// const uri = 'mongodb://mongo_db:27017';
-const uri = 'mongodb://mongo_db:27017';
+// const uri = 'mongodb://localhost:27017';
+const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
 const Codebook = require('../models/Codebook.model');
 const db = client.db('cbms-resources');
 
 const collection = db.collection('2023_codebook');
 // const data = await commonOcc.find().toArray();
+
+const { createClient } = require('redis');
+
+const redisClient = createClient();
+
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
 
 module.exports = {
 	uploadCodebook: async (req, res, next) => {
@@ -49,9 +55,17 @@ module.exports = {
 			// const results = await Codebook.find({}, { __v: 0, _id: 0 });
 			// const results = await Product.find({}, { name: 1, price: 1, _id: 0 });
 			// const results = await Product.find({ price: 699 }, {});
-			const results = await collection.find({}, { __v: 0, _id: 0 }).toArray();
+			await redisClient.connect();
 
-			res.send(results);
+			const value = await redisClient.get('cbms-codebook');
+			await redisClient.disconnect();
+
+			if (value) {
+				res.send(value);
+			} else {
+				const results = await collection.find({}, { __v: 0, _id: 0 }).toArray();
+				res.send(results);
+			}
 		} catch (error) {
 			console.log(error.message);
 		}

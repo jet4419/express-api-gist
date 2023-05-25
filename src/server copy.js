@@ -10,7 +10,7 @@ const cors = require('cors');
 // MongoClient
 const { MongoClient } = require('mongodb');
 // Replace the uri string with your connection string.
-const uri = 'mongodb://mongo_db:27017';
+const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
 const database = client.db('apptest');
 //
@@ -164,7 +164,7 @@ app.post('/users', async (req, res) => {
 
 mongoose.set('strictQuery', false);
 mongoose
-	.connect('mongodb://mongo_db:27017/apptest')
+	.connect('mongodb://localhost:27017/apptest')
 	.then(() => {
 		console.log('connected to MongoDB');
 		app.listen(3000, () => {

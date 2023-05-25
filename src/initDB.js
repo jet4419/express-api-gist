@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 module.exports = () => {
 	mongoose.set('strictQuery', false);
 	mongoose
-		.connect('mongodb://mongo_db:27017/cbms-resources')
+		.connect('mongodb://localhost:27017/cbms-resources')
 		.then(() => {
 			console.log('connected to MongoDB');
 			// app.listen(3000, () => {

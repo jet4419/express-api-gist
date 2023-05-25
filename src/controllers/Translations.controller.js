@@ -4,7 +4,7 @@
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 // Replace the uri string with your connection string.
-const uri = 'mongodb://mongo_db:27017';
+const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
 const Translations = require('../models/Translations.model');
 const db = client.db('cbms-resources');
