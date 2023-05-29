@@ -4,6 +4,8 @@ const Codebook = require('./models/Codebook.model');
 const app = express();
 const compression = require('compression');
 
+const { userLogin } = require('./controllers/Auth.controller');
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -38,12 +40,18 @@ app.use(compression());
 
 require('./initDB')();
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
 	res.send('Hello NODE API');
 });
 
 // const PlayRoute = require('./routes/Play.route');
 // app.use('/plays', PlayRoute);
+
+app.post('/auth/test', userLogin, (req, res) => {
+	res.status(200).json({
+		message: req.message,
+	});
+});
 
 const CodebookRoute = require('./routes/Codebook.route');
 app.use('/codebook', CodebookRoute);
